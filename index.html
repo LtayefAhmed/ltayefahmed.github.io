@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ahmed Ltayef — AI Engineering</title>
+<meta name="description" content="Final-year engineering student at ENICarthage. I build autonomous agents, deep-learning systems and the engineering around them — shipped to production." />
+<meta name="theme-color" content="#0a0a0a" />
+<meta property="og:title" content="Ahmed Ltayef — AI Engineering" />
+<meta property="og:description" content="Autonomous agents, deep learning, shipped to production." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================================
+   Ahmed Ltayef — portfolio, single self-contained file.
+   Layout is rem-based: the root font-size tracks the viewport, so every
+   measure below stays proportional on any screen.
+   =========================================================================== */
+
+/* --- reset / base ------------------------------------------------------- */
+*{ box-sizing:border-box; margin:0; padding:0 }
+html{ font-size:16px; -webkit-font-smoothing:antialiased }
+body{ background:#ffffff; color:#111111; font-family:'Onest',sans-serif; overflow-x:hidden }
+a{ color:inherit; text-decoration:none }
+button{ font:inherit; color:inherit; background:none; border:none; cursor:pointer }
+ul{ list-style:none }
+img{ display:block }
+.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+:focus-visible{ outline:2px solid #b15f2c; outline-offset:2px }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important } }
+
+/* The surfaces the browser draws, not me — themed so nothing ships default. */
+::selection{ background:#b15f2c; color:#fff }
+::-webkit-scrollbar{ width:10px; height:10px }
+::-webkit-scrollbar-track{ background:#f1f0ee }
+::-webkit-scrollbar-thumb{ background:#c9c6c0; border-radius:9999px; border:2px solid #f1f0ee }
+::-webkit-scrollbar-thumb:hover{ background:#b15f2c }
+html{ scrollbar-color:#c9c6c0 #f1f0ee }
+
+/* --- adaptive grid ------------------------------------------------------ */
+@media (max-width:1920px){ html{ font-size:0.833333vw } }
+@media (max-width:1440px){ html{ font-size:1.111111vw } }
+@media (max-width:1024px){ html{ font-size:1.5625vw } }
+@media (max-width:640px){  html{ font-size:4.444444vw } }
+
+/* --- tokens ------------------------------------------------------------- */
+:root{
+  --background:#ffffff; --foreground:#111111;
+  --ink:#0a0a0a; --muted:#8d8d8d; --subtle:#b6b6b6;
+  --line:#e6e5e2; --surface:#f1f0ee; --surface-2:#e3e2df;
+  --accent:#b15f2c; --accent-from:#cf8047; --accent-to:#97501f;
+  --hero-from:#ecebe9; --hero-to:#c9c9c9;
+  --radius-pill:9999px; --radius-card:2rem; --radius-card-sm:1.25rem; --radius-control:0.875rem;
+  --text-watermark:13rem; --container-shell:88rem;
+}
+.shell{ max-width:var(--container-shell); margin-inline:auto }
+
+/* --- entrance reveals --------------------------------------------------- */
+.rv{ opacity:0; transform:translateY(var(--rv-y,16px)) scale(var(--rv-s,1));
+     transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+     transition-delay:var(--rv-d,0ms) }
+.rv.in{ opacity:var(--rv-o,1); transform:translateY(0) scale(1) }
+.line{ display:block; overflow:hidden }
+.line > span{ display:block; transform:translateY(100%); opacity:0;
+  transition:transform .9s cubic-bezier(.215,.61,.355,1), opacity .9s cubic-bezier(.215,.61,.355,1);
+  transition-delay:var(--ld,0ms) }
+.lines.in .line > span{ transform:translateY(0); opacity:1 }
+.word{ display:inline-block; transform:translateY(24px); opacity:0;
+  transition:transform .7s cubic-bezier(.165,.84,.44,1), opacity .7s cubic-bezier(.165,.84,.44,1);
+  transition-delay:var(--wd,0ms) }
+.words.in .word{ transform:translateY(0); opacity:1 }
+
+/* --- shared components -------------------------------------------------- */
+.eyebrow{ display:inline-flex; align-items:center; gap:.5rem; font-size:.875rem; font-weight:500; color:rgba(17,17,17,.7) }
+.eyebrow::before{ content:""; width:.375rem; height:.375rem; border-radius:9999px; background:rgba(17,17,17,.5) }
+.eyebrow.light{ color:rgba(255,255,255,.7) }
+.eyebrow.light::before{ background:rgba(255,255,255,.6) }
+.eyebrow.boxed{ border:1px solid var(--line); border-radius:9999px; padding:.375rem 1rem }
+
+.pill{ display:inline-block }
+.pill > span{ display:inline-flex; align-items:center; gap:.75rem; border-radius:9999px;
+  font-size:.875rem; font-weight:500; transition:transform .35s cubic-bezier(.2,.8,.2,1) }
+.pill.arrow > span{ padding:.375rem .375rem .375rem 1.5rem }
+.pill.bare > span{ padding:.875rem 1.75rem }
+.pill.dark > span{ background:#0a0a0a; color:#fff }
+.pill.light > span{ background:var(--surface); color:#111 }
+/* --line is too faint to read as a button on the textured hero. */
+.pill.outline > span{ border:1px solid rgba(17,17,17,.2); background:rgba(255,255,255,.35); color:#111 }
+.pill .badge{ width:2.25rem; height:2.25rem; display:grid; place-items:center; border-radius:9999px; font-size:1rem }
+.pill.dark .badge{ background:#fff; color:#0a0a0a }
+.pill.light .badge, .pill.outline .badge{ background:#0a0a0a; color:#fff }
+.pill .badge svg{ transition:transform .35s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){
+  .pill:hover > span{ transform:scale(1.04) }
+  .pill:hover .badge svg.ar{ transform:translate(3px,0) }
+  .pill:hover .badge svg.aur{ transform:translate(2px,-2px) }
+}
+
+.chip{ display:inline-flex; border:1px solid var(--line); color:#111; border-radius:9999px; padding:.5rem 1rem; font-size:.875rem }
+.chip.on-dark{ border-color:rgba(255,255,255,.25); color:#fff }
+
+.alink > span{ display:inline-flex; opacity:.65; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s }
+@media (hover:hover){ .alink:hover > span{ transform:translateX(4px); opacity:1 } }
+/* .85, not .7: these links sit on an already-dimmed legal row, and the two
+   opacities multiply straight through the contrast floor. */
+.alink.tight > span{ opacity:.85 }
+@media (hover:hover){ .alink.tight:hover > span{ transform:translateX(3px); opacity:1 } }
+
+svg.i{ width:1em; height:1em; display:block; flex:none }
+
+/* --- skip link ---------------------------------------------------------- */
+.skip{ position:fixed; left:1rem; top:1rem; z-index:60; border-radius:.875rem; background:#0a0a0a;
+  padding:.5rem 1rem; font-size:.875rem; color:#fff; transform:translateY(-200%) }
+.skip:focus{ transform:translateY(0) }
+
+/* --- loader ------------------------------------------------------------- */
+#loader{ position:fixed; inset:0; z-index:120; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:2rem; background:#0a0a0a; color:#fff; border-radius:0 0 2rem 2rem;
+  transform:translateY(0); transition:transform .75s cubic-bezier(.22,1,.36,1) }
+#loader.out{ transform:translateY(-100%) }
+#loader .mid{ display:flex; flex-direction:column; align-items:center; gap:1.25rem; text-align:center;
+  transition:opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1) }
+#loader.out .mid{ opacity:0; transform:translateY(-12px) }
+#loader .brand{ display:flex; align-items:center; gap:.5rem; font-weight:600; font-size:1.5rem }
+#loader .brand svg{ font-size:1.875rem; color:#cf8047 }
+#loader .tag{ max-width:26ch; font-size:.875rem; color:rgba(255,255,255,.55) }
+#loader .prog{ width:min(22rem,72vw); display:flex; flex-direction:column; gap:.75rem }
+#loader .track{ height:1px; background:rgba(255,255,255,.15) }
+#loader .fill{ height:100%; background:#cf8047; width:0%; transition:width .1s ease-out }
+#loader .meta{ display:flex; justify-content:space-between; font-size:.75rem; font-weight:500;
+  text-transform:uppercase; letter-spacing:.05em; color:rgba(255,255,255,.62) }
+#loader .count{ font-variant-numeric:tabular-nums; color:rgba(255,255,255,.8) }
+@media (min-width:640px){ #loader .brand{ font-size:1.875rem } }
+
+/* --- header ------------------------------------------------------------- */
+#hdr{ position:absolute; inset-inline:0; top:0; z-index:50 }
+#hdr .bar{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding:1.25rem }
+#hdr .brand{ display:flex; align-items:center; gap:.5rem; font-size:1.125rem; font-weight:600; letter-spacing:-.01em;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1) }
+#hdr .brand svg{ font-size:1.25rem; color:#b15f2c }
+@media (hover:hover){ #hdr .brandbtn:hover .brand{ transform:scale(1.04) } }
+#hdr nav{ display:none }
+#hdr nav ul{ display:flex; gap:2rem; font-size:.875rem; font-weight:500 }
+#hdr nav button > span{ display:inline-flex; align-items:center; gap:.25rem; opacity:.8;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s }
+@media (hover:hover){ #hdr nav button:hover > span{ transform:translateY(-2px); opacity:1 } }
+#hdr .right{ display:flex; align-items:center; gap:.75rem }
+#hdr .clock{ display:none; align-items:center; gap:.75rem; border:1px solid rgba(230,229,226,.8);
+  background:rgba(255,255,255,.4); backdrop-filter:blur(4px); border-radius:.875rem; padding:.5rem .75rem;
+  font-size:.75rem; color:rgba(17,17,17,.7) }
+#hdr .clock .lbl{ color:rgba(17,17,17,.45) }
+#hdr .clock .t{ min-width:3.5rem; font-variant-numeric:tabular-nums; font-weight:500; color:#111 }
+#hdr .clock .sep{ color:rgba(17,17,17,.3) }
+#hdr .clock .d{ font-weight:500 }
+#menubtn{ border:1px solid rgba(230,229,226,.8); background:rgba(255,255,255,.4); backdrop-filter:blur(4px);
+  border-radius:.875rem; transition:background .25s }
+#menubtn:hover{ background:rgba(255,255,255,.7) }
+#menubtn > span{ display:inline-flex; align-items:center; gap:.5rem; padding:.5rem 1rem; font-size:.75rem;
+  font-weight:500; text-transform:uppercase; letter-spacing:.05em; transition:transform .35s cubic-bezier(.2,.8,.2,1) }
+#menubtn > span svg{ font-size:.875rem }
+@media (hover:hover){ #menubtn:hover > span{ transform:scale(1.05) } }
+#menubtn .word{ display:none; opacity:1; transform:none }
+@media (min-width:640px){ #menubtn .word{ display:inline } }
+@media (min-width:768px){ #hdr .clock{ display:flex } }
+@media (min-width:1024px){ #hdr nav{ display:flex } #hdr .bar{ padding:1.5rem 2rem } }
+@media (min-width:640px){ #hdr .bar{ padding:1.5rem 2rem } }
+
+/* --- hero --------------------------------------------------------------- */
+#home{ position:relative; isolation:isolate; overflow:hidden; border-radius:0 0 2rem 2rem; background:#c9c9c9 }
+#liquid{ position:absolute; inset:0; z-index:0 }
+#liquid canvas{ position:absolute; inset:0; width:100%; height:100% }
+#liquid canvas.paint{ pointer-events:none }
+.vignette{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,.35), transparent, rgba(255,255,255,.35)) }
+/* Keeps the copy legible wherever the brush paints the dark signal layer. */
+.scrim{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(104deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.68) 26%, rgba(255,255,255,.22) 52%, rgba(255,255,255,0) 70%) }
+/* Ink, not white: the base layer here is light, so a white watermark simply
+   disappears. */
+.watermark{ pointer-events:none; position:absolute; inset-inline:0; bottom:5rem; z-index:1; text-align:center;
+  user-select:none; font-weight:700; line-height:1; font-size:var(--text-watermark); color:rgba(17,17,17,.085) }
+#home .grid{ position:relative; z-index:20; display:flex; flex-direction:column; gap:2rem; padding:7rem 1.25rem 5rem }
+.hcol-l{ display:flex; flex-direction:column; gap:1.75rem }
+.hcol-r{ display:flex; flex-direction:column; align-items:flex-start; gap:2rem }
+#home h1{ max-width:18ch; font-size:2.25rem; font-weight:600; line-height:.98; letter-spacing:-.02em }
+.awards{ display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; font-size:.875rem; font-weight:500; color:rgba(17,17,17,.75) }
+.awards .star{ color:#b15f2c; font-size:1rem; display:inline-flex }
+.awards .dot{ color:rgba(17,17,17,.3) }
+.ctas{ display:flex; flex-wrap:wrap; gap:.75rem }
+.hcard{ width:100%; max-width:24rem; border-radius:1.25rem; background:rgba(255,255,255,.7); padding:.5rem;
+  box-shadow:0 1px 2px rgba(17,17,17,.06), 0 0 0 1px rgba(230,229,226,.7); backdrop-filter:blur(12px) }
+.hcard .row{ display:flex; gap:.5rem; cursor:pointer; border-radius:.875rem; width:100%; text-align:left }
+.hcard .tile{ aspect-ratio:1; width:6rem; display:grid; place-items:center; border-radius:.875rem; background:#0a0a0a; font-size:1.875rem; color:#cf8047 }
+.hcard .panel{ flex:1; border-radius:.875rem; background:rgba(241,240,238,.7); padding:.75rem; display:flex; flex-direction:column; justify-content:space-between }
+.hcard .slot{ position:relative; min-height:3.25rem }
+.hcard .item{ position:absolute; inset:0; transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s }
+.hcard .cap{ display:block; font-size:.65rem; font-weight:500; text-transform:uppercase; letter-spacing:.05em; color:rgba(17,17,17,.45) }
+.hcard .ttl{ display:block; max-width:9rem; font-size:.875rem; font-weight:500; line-height:1.35; margin-top:.15rem }
+.hcard .bot{ display:flex; align-items:center; justify-content:space-between; margin-top:.5rem }
+.hcard .dots{ display:flex; gap:.25rem }
+.hcard .dots i{ height:.25rem; border-radius:9999px; width:.375rem; background:rgba(17,17,17,.2); transition:all .3s }
+.hcard .dots i.on{ width:1rem; background:rgba(17,17,17,.7) }
+.hcard .nav{ display:flex; gap:.25rem }
+.hcard .nav button{ width:1.75rem; height:1.75rem; display:grid; place-items:center; border-radius:9999px;
+  background:#fff; color:rgba(17,17,17,.7); box-shadow:0 0 0 1px var(--line); transition:color .25s }
+.hcard .nav button:hover{ color:#111 }
+.stackgrid{ width:100%; max-width:24rem }
+.stackgrid .lbl{ margin-bottom:.75rem; font-size:.75rem; font-weight:500; color:rgba(17,17,17,.45) }
+/* Two columns, not four: "PostgreSQL" at 0.75rem does not survive a 70px track. */
+.stackgrid ul{ display:grid; grid-template-columns:repeat(2,1fr); column-gap:1rem; row-gap:.75rem }
+.stackgrid li > span{ display:flex; align-items:center; gap:.375rem; font-size:.75rem; color:rgba(17,17,17,.7);
+  opacity:.7; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s }
+.stackgrid li svg{ font-size:.875rem; color:rgba(17,17,17,.4) }
+@media (hover:hover){ .stackgrid li:hover > span{ transform:translateY(-2px); opacity:1 } }
+/* Needs its own stacking context: without it the status bar paints under
+   the z-index:1 scrim and the whole row is washed out. */
+.statusbar{ position:relative; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+  border-top:1px solid rgba(17,17,17,.1); padding:1.25rem; font-size:.75rem; font-weight:500;
+  text-transform:uppercase; letter-spacing:.025em; color:rgba(17,17,17,.6) }
+.statusbar .mid{ display:none }
+.statusbar .scroll{ display:inline-flex; gap:.5rem }
+@media (min-width:640px){
+  #home .grid{ padding-inline:2rem } .statusbar{ padding-inline:2rem }
+  #home h1{ font-size:3rem } .statusbar .mid{ display:block }
+}
+@media (min-width:768px){ #home h1{ font-size:3.75rem } }
+@media (min-width:1024px){
+  /* The status bar belongs on the fold, not below it: the grid gives it room
+     instead of taking the whole viewport for itself. */
+  #home .grid{ display:grid; min-height:calc(100lvh - 5.5rem); grid-template-columns:repeat(12,1fr);
+    gap:2.5rem; padding:8rem 2rem 3rem; align-items:center }
+  .hcol-l{ grid-column:span 7; justify-content:center } .hcol-r{ grid-column:span 5; align-items:flex-end; justify-content:center }
+  .hcard, .stackgrid{ width:19rem } .stackgrid .lbl{ text-align:right }
+}
+
+/* --- about -------------------------------------------------------------- */
+#about{ background:#fff }
+#about .inner{ display:grid; grid-template-columns:1fr; align-items:center; gap:3rem; padding:5rem 1.25rem }
+/* A 24px line icon blown up to 320px at 7% opacity used to sit here as a
+   watermark. In an otherwise empty column it reads as an image that failed
+   to load — the one thing a hiring page cannot afford. Facts instead. */
+.globeblock{ display:flex; flex-direction:column; gap:2rem; max-width:30rem }
+.globeblock .facts{ display:flex; flex-direction:column; margin:0 }
+.globeblock .facts > div{ display:grid; grid-template-columns:6.5rem 1fr; gap:1rem;
+  border-top:1px solid var(--line); padding:1rem 0 }
+.globeblock .facts > div:last-child{ border-bottom:1px solid var(--line) }
+.globeblock dt{ font-size:.6875rem; font-weight:500; text-transform:uppercase; letter-spacing:.06em;
+  color:rgba(17,17,17,.6); padding-top:.2rem }
+.globeblock dd{ margin:0; font-size:.875rem; line-height:1.5; color:rgba(17,17,17,.6) }
+.globeblock dd b{ display:block; font-weight:500; color:#111 }
+.globeblock .foot{ display:flex; align-items:center; gap:.75rem; font-size:.875rem; color:rgba(17,17,17,.7) }
+.globeblock .foot svg{ font-size:1.5rem; color:#111; flex:none }
+.globeblock .foot span{ max-width:18rem }
+#about .stmt{ display:flex; flex-direction:column; gap:2.5rem }
+#about h2{ font-size:1.5rem; font-weight:500; line-height:1.35; letter-spacing:-.01em }
+#about h2 .dim{ color:var(--muted) }
+#about .frow{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1.5rem;
+  border-top:1px solid var(--line); padding-top:1.5rem }
+#about .social{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.5rem }
+#about .social a{ display:inline-flex; align-items:center; border-radius:9999px; padding:.5rem 1rem;
+  font-size:.875rem; font-weight:500; transition:transform .35s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ #about .social a:hover{ transform:translateY(-2px) } }
+#about .social .primary{ background:#b15f2c; color:#fff }
+#about .social .plain{ background:var(--surface); color:rgba(17,17,17,.7) }
+@media (min-width:640px){
+  #about .inner{ padding-inline:2rem } #about h2{ font-size:1.875rem }
+}
+@media (min-width:1024px){
+  #about .inner{ grid-template-columns:1fr 1fr; padding-block:7rem }
+}
+
+/* --- credentials band --------------------------------------------------- */
+#creds{ background:#fff }
+#creds .inner{ padding:0 1.25rem 2.5rem }
+#creds .wrap{ border-top:1px solid var(--line); padding-top:2rem; display:flex; flex-direction:column; gap:1rem }
+#creds ul{ display:flex; flex-wrap:wrap; gap:.5rem }
+@media (min-width:640px){ #creds .inner{ padding-inline:2rem } }
+
+/* --- build band --------------------------------------------------------- */
+#band{ background:#fff }
+#band ul{ display:flex; flex-direction:column; gap:.75rem; padding:2.5rem 1.25rem }
+#band li{ flex:1 }
+#band .tile{ display:grid; place-items:center; height:6rem; border-radius:9999px; font-size:1.875rem; font-weight:500;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ #band li:hover .tile{ transform:scale(1.03) } }
+#band .t-light{ background:var(--surface); color:#111 }
+#band .t-accent{ background:linear-gradient(to bottom right,#cf8047,#97501f); color:#fff }
+#band .t-dark{ background:#0a0a0a; color:#fff }
+#band .t-ghost{ background:rgba(241,240,238,.6); color:rgba(17,17,17,.35) }
+#band .t-dark svg{ font-size:2.25rem }
+@media (min-width:640px){
+  #band ul{ flex-direction:row; gap:1rem; padding-inline:2rem }
+  #band .tile{ height:10rem; font-size:2.25rem } #band .t-dark svg{ font-size:3rem }
+}
+
+/* --- works -------------------------------------------------------------- */
+#works{ background:#fff }
+#works .inner{ padding:2.5rem 1.25rem 5rem }
+#works .head{ display:flex; flex-direction:column; align-items:center; gap:1.25rem; margin-bottom:3rem; text-align:center }
+#works h2{ font-size:2.25rem; font-weight:600; letter-spacing:-.02em }
+#works .cards{ display:grid; grid-template-columns:1fr; gap:1.5rem }
+/* A 1fr track is minmax(auto,1fr): without this the longest word in a card
+   becomes the column's floor. */
+#works .cards > li{ min-width:0 }
+/* Column flow, not an absolutely positioned foot: with overflow:hidden the
+   longest card used to clip its own title the moment the copy grew. */
+.wcard{ position:relative; display:flex; flex-direction:column; min-height:22rem;
+  overflow:hidden; border-radius:2rem; background:#0a0a0a; padding:1.5rem;
+  color:#fff; box-shadow:0 0 0 1px rgba(255,255,255,.05); transition:transform .4s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ #works a:hover .wcard{ transform:translateY(-8px) scale(1.012) } }
+.wcard .meta{ display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
+  font-size:.75rem; text-transform:uppercase; letter-spacing:.025em; color:rgba(255,255,255,.62); position:relative; z-index:2 }
+.wcard .go{ width:2.75rem; height:2.75rem; display:grid; place-items:center; border-radius:9999px;
+  background:rgba(255,255,255,.1); color:#fff; box-shadow:0 0 0 1px rgba(255,255,255,.15);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ #works a:hover .go{ transform:rotate(45deg) scale(1.08) } }
+/* It takes the free space between the meta row and the foot and centres
+   itself in whatever is left, so it can never end up behind the title. */
+.wcard .mark{ position:relative; z-index:1; flex:1; min-height:3rem;
+  display:grid; justify-items:center; align-content:center; pointer-events:none }
+.wcard .mark svg{ font-size:4.5rem; color:rgba(255,255,255,.09) }
+.wcard .mark sup{ font-size:.75rem; color:rgba(255,255,255,.6) }
+.wcard .foot{ position:relative; margin-top:auto; padding-top:2.5rem; z-index:2 }
+.wcard h3{ font-size:1.5rem; font-weight:500; letter-spacing:-.01em }
+.wcard p{ margin-top:.5rem; max-width:28rem; font-size:.875rem; color:rgba(255,255,255,.55) }
+/* The card is a link to a public repository: say which one. A recruiter
+   should not have to click to learn whether the code is actually there. */
+/* A repository path is one unbreakable string: left alone it set the card's
+   min-content width and pushed the whole grid past the viewport (542px inside
+   504px, measured). It wraps, and the card refuses to be sized by it. */
+.wcard .repo{ display:flex; align-items:center; gap:.5rem; margin-top:.875rem;
+  font-size:.75rem; letter-spacing:.01em; color:rgba(255,255,255,.55) }
+.wcard .repo svg{ font-size:.875rem; flex:none }
+.wcard .repo span{ min-width:0; overflow-wrap:anywhere }
+.wcard .repo b{ font-weight:500; color:rgba(255,255,255,.8) }
+.wcard .tags{ margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:.5rem }
+@media (min-width:640px){
+  #works .inner{ padding-inline:2rem } #works h2{ font-size:3rem }
+  .wcard{ min-height:26rem; padding:2rem } .wcard h3{ font-size:1.875rem }
+}
+@media (min-width:768px){ #works .cards{ grid-template-columns:1fr 1fr } }
+@media (min-width:1024px){ #works .inner{ padding-bottom:7rem } }
+
+/* --- services ----------------------------------------------------------- */
+#services{ background:#fff }
+#services .inner{ padding:5rem 1.25rem }
+#services h2{ margin:1.25rem 0 3rem; max-width:16ch; font-size:2.25rem; font-weight:600; letter-spacing:-.02em }
+.srow{ border-top:1px solid var(--line) }
+#services li:first-child .srow{ border-top:0 }
+/* width:100% is load-bearing — a flex <button> shrinks to its content, so
+   without it every row ends where its own title ends. */
+.srow .in{ width:100%; display:flex; align-items:center; gap:1rem; border-radius:1.25rem; padding:1.5rem;
+  text-align:left; background:rgba(241,240,238,0);
+  transition:background .45s cubic-bezier(.2,.8,.2,1), padding .45s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ .srow:hover .in{ background:rgba(241,240,238,1); padding-left:2rem; padding-right:1.25rem } }
+.srow .num{ width:1.75rem; font-size:.875rem; font-weight:500; color:rgba(17,17,17,.4) }
+.srow h3{ flex:1; font-size:1.5rem; font-weight:500; letter-spacing:-.01em }
+.srow p{ display:none; max-width:20rem; font-size:.875rem; color:rgba(17,17,17,.55) }
+.srow .go{ width:2.5rem; height:2.5rem; display:grid; place-items:center; border-radius:9999px; background:#0a0a0a;
+  color:#fff; transition:transform .4s cubic-bezier(.2,.8,.2,1) }
+@media (hover:hover){ .srow:hover .go{ transform:translateX(5px) } }
+@media (min-width:640px){
+  #services .inner{ padding-inline:2rem } #services h2{ margin-bottom:3.5rem; font-size:3rem }
+  .srow .in{ gap:1.5rem; padding-block:2rem } .srow .num{ width:2.5rem } .srow h3{ font-size:1.875rem }
+  .srow .go{ width:3rem; height:3rem }
+}
+@media (min-width:768px){ .srow h3{ font-size:2.25rem } }
+@media (min-width:1024px){ #services .inner{ padding-block:7rem } .srow p{ display:block } }
+
+/* --- stats -------------------------------------------------------------- */
+#stats{ background:#fff }
+#stats .inner{ padding:0 1.25rem 5rem }
+#stats .panel{ border-radius:2rem; background:#0a0a0a; padding:3rem 1.5rem; color:#fff }
+#stats h2{ margin-top:1rem; max-width:20ch; font-size:1.875rem; font-weight:500; letter-spacing:-.01em }
+#stats ul{ margin-top:3.5rem; display:grid; grid-template-columns:repeat(2,1fr); column-gap:2rem; row-gap:3rem }
+#stats .n{ font-size:3rem; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums }
+#stats .l{ margin-top:.75rem; font-size:.875rem; color:rgba(255,255,255,.55) }
+@media (min-width:640px){ #stats .inner{ padding-inline:2rem } #stats .panel{ padding:4rem 2rem } #stats .n{ font-size:3.75rem } }
+@media (min-width:768px){ #stats .panel{ padding-inline:4rem } #stats h2{ font-size:2.25rem } #stats .n{ font-size:4.5rem } }
+@media (min-width:1024px){ #stats .inner{ padding-bottom:7rem } #stats ul{ grid-template-columns:repeat(4,1fr) } }
+
+/* --- footer ------------------------------------------------------------- */
+footer{ position:relative; overflow:hidden; border-radius:2rem 2rem 0 0; background:#0a0a0a; color:#fff }
+footer .inner{ position:relative; z-index:10; padding:5rem 1.25rem 2.5rem }
+footer .cta{ display:flex; flex-direction:column; gap:2rem; border-bottom:1px solid rgba(255,255,255,.1); padding-bottom:4rem }
+footer .cta h2{ max-width:22ch; font-size:2.25rem; font-weight:600; letter-spacing:-.02em }
+footer .cols{ display:grid; grid-template-columns:1fr; gap:3rem; padding-block:4rem }
+footer .cols h3{ font-size:.75rem; text-transform:uppercase; letter-spacing:.025em; color:rgba(255,255,255,.58); margin-bottom:1rem }
+footer .cols li{ font-size:.875rem; margin-bottom:.625rem }
+footer .bcol .b{ display:flex; align-items:center; gap:.5rem; font-size:1.125rem; font-weight:600 }
+footer .bcol .b svg{ font-size:1.25rem }
+footer .bcol p{ margin-top:1rem; max-width:20rem; font-size:.875rem; color:rgba(255,255,255,.55) }
+footer .legal{ display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:1rem;
+  border-top:1px solid rgba(255,255,255,.1); padding-top:2rem; font-size:.75rem; color:rgba(255,255,255,.62) }
+footer .legal .r{ display:flex; gap:1.5rem }
+footer .wm{ position:absolute; inset-inline:0; bottom:-1.5rem; z-index:0; text-align:center; pointer-events:none;
+  user-select:none; font-weight:700; line-height:1; font-size:var(--text-watermark); color:rgba(255,255,255,.05) }
+@media (min-width:640px){
+  footer .inner{ padding-inline:2rem } footer .cta h2{ font-size:3rem }
+  footer .legal{ flex-direction:row }
+}
+@media (min-width:768px){ footer .cta h2{ font-size:3.75rem } footer .cols{ grid-template-columns:1fr 1fr } }
+@media (min-width:1024px){
+  footer .inner{ padding-top:6rem } footer .cols{ grid-template-columns:repeat(4,1fr) }
+  footer .cta{ flex-direction:row; align-items:flex-end; justify-content:space-between }
+}
+
+/* --- nav overlay -------------------------------------------------------- */
+#navmenu{ position:fixed; inset:0; z-index:115; display:flex; flex-direction:column; background:#0a0a0a; color:#fff;
+  opacity:0; visibility:hidden; transition:opacity .4s cubic-bezier(.2,.8,.2,1), visibility .4s }
+#navmenu.open{ opacity:1; visibility:visible }
+#navmenu .top{ display:flex; align-items:center; justify-content:space-between; padding:1.25rem }
+#navmenu .top .b{ display:flex; align-items:center; gap:.5rem; font-size:1.125rem; font-weight:600 }
+#navmenu .top .b svg{ font-size:1.25rem; color:#cf8047 }
+#navclose{ display:inline-flex; align-items:center; gap:.5rem; border:1px solid rgba(255,255,255,.15);
+  border-radius:.875rem; padding:.5rem 1rem; font-size:.75rem; font-weight:500; text-transform:uppercase;
+  letter-spacing:.05em; color:rgba(255,255,255,.7); transition:color .25s, border-color .25s }
+#navclose:hover{ border-color:rgba(255,255,255,.4); color:#fff }
+#navmenu .mid{ flex:1; display:flex; flex-direction:column; justify-content:center }
+#navmenu .mid ul{ display:flex; flex-direction:column; gap:.25rem }
+#navmenu .mid button{ display:flex; gap:1rem; align-items:baseline; width:100%; padding-block:.5rem; text-align:left;
+  font-size:2.25rem; font-weight:600; letter-spacing:-.02em;
+  transform:translateY(1rem); opacity:0; transition:all .5s ease-out }
+#navmenu.open .mid button{ transform:translateY(0); opacity:1 }
+#navmenu .mid .ix{ font-size:1rem; font-weight:400; color:rgba(255,255,255,.46); transition:color .3s }
+#navmenu .mid .lb{ color:rgba(255,255,255,.7); transition:color .3s }
+#navmenu .mid button:hover .ix{ color:#cf8047 }
+#navmenu .mid button:hover .lb{ color:#fff }
+#navmenu .bot{ display:flex; flex-direction:column; gap:.75rem; border-top:1px solid rgba(255,255,255,.1);
+  padding:1.5rem 1.25rem; font-size:.75rem; text-transform:uppercase; letter-spacing:.025em; color:rgba(255,255,255,.62) }
+#navmenu .bot button{ color:rgba(255,255,255,.7); transition:color .25s }
+#navmenu .bot button:hover{ color:#fff; text-decoration:underline }
+@media (min-width:640px){
+  #navmenu .top{ padding:1.5rem 2rem } #navmenu .mid button{ font-size:3.75rem }
+  #navmenu .bot{ flex-direction:row; justify-content:space-between; padding-inline:2rem }
+}
+
+/* --- modal -------------------------------------------------------------- */
+#modal{ position:fixed; inset:0; z-index:110; display:flex; align-items:flex-end; justify-content:center; padding:1rem;
+  background:rgba(17,17,17,.3); backdrop-filter:blur(16px);
+  opacity:0; visibility:hidden; transition:opacity .35s, visibility .35s }
+#modal.open{ opacity:1; visibility:visible }
+#modal .panel{ position:relative; width:100%; max-width:32rem; overflow:hidden; border-radius:2rem; background:#fff;
+  padding:1.5rem; box-shadow:0 25px 50px -12px rgba(17,17,17,.25), 0 0 0 1px var(--line);
+  transform:translateY(28px); transition:transform .4s cubic-bezier(.2,.8,.2,1) }
+#modal.open .panel{ transform:translateY(0) }
+#modalclose{ position:absolute; right:1rem; top:1rem; width:2.25rem; height:2.25rem; display:grid; place-items:center;
+  border-radius:9999px; background:var(--surface); color:rgba(17,17,17,.6); transition:background .25s, color .25s }
+#modalclose:hover{ background:var(--surface-2); color:#111 }
+#modal .headb{ margin-bottom:1.5rem; display:flex; flex-direction:column; gap:.375rem }
+#modal .kick{ display:inline-flex; align-items:center; gap:.5rem; font-size:.875rem; font-weight:500; color:rgba(17,17,17,.6) }
+#modal .kick::before{ content:""; width:.375rem; height:.375rem; border-radius:9999px; background:#b15f2c }
+#modal h2{ font-size:1.5rem; font-weight:600; letter-spacing:-.01em }
+#modal form{ display:flex; flex-direction:column; gap:1rem }
+#modal label{ display:flex; flex-direction:column; gap:.375rem }
+#modal .cap{ font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.025em; color:rgba(17,17,17,.5) }
+#modal input, #modal textarea{ width:100%; border:1px solid var(--line); background:rgba(241,240,238,.5);
+  border-radius:.875rem; padding:.75rem 1rem; font-size:.875rem; font-family:inherit; color:#111; outline:none;
+  transition:border-color .25s, background .25s }
+#modal textarea{ resize:none }
+#modal input:focus, #modal textarea:focus{ border-color:rgba(17,17,17,.3); background:#fff }
+#modal input:invalid:not(:placeholder-shown){ border-color:#b15f2c }
+#modal .brow{ margin-top:.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem }
+#modal .note{ font-size:.75rem; color:rgba(17,17,17,.45) }
+#modal .ok{ display:none; flex-direction:column; align-items:center; text-align:center; padding-block:2rem; gap:1rem }
+#modal.done .ok{ display:flex } #modal.done .headb, #modal.done form{ display:none }
+#modal .ok .badge{ width:3.5rem; height:3.5rem; display:grid; place-items:center; border-radius:9999px;
+  background:#0a0a0a; color:#cf8047; font-size:1.5rem }
+#modal .ok p{ max-width:34ch; font-size:.875rem; color:rgba(17,17,17,.6) }
+#modal .ok code{ font-size:.875rem; color:#111; background:var(--surface); padding:.25rem .5rem; border-radius:.5rem }
+@media (min-width:640px){ #modal{ align-items:center } #modal .panel{ padding:2rem } #modal h2{ font-size:1.875rem } }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ======================= icons ======================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ic-logo" viewBox="0 0 48 48"><path fill="currentColor" d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></symbol>
+  <symbol id="ic-ar" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="ic-aur" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="ic-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></symbol>
+  <symbol id="ic-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9.25"/><path d="M12 2.75c2.6 2.3 4 5.8 4 9.25s-1.4 6.95-4 9.25c-2.6-2.3-4-5.8-4-9.25s1.4-6.95 4-9.25zM2.75 12h18.5"/></g></symbol>
+  <symbol id="ic-gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.2 4 18.2 4.3 18.2 4.3c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></symbol>
+  <symbol id="ic-x"viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 4l16 16M20 4 4 20"/></symbol>
+  <symbol id="ic-dot" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></g><circle cx="12" cy="12" r="3.2" fill="currentColor"/></symbol>
+  <symbol id="ic-grid" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</defs></svg>
+
+<!-- ======================= loader ======================= -->
+<div id="loader" role="status" aria-live="polite">
+  <div class="mid">
+    <div class="brand"><svg class="i"><use href="#ic-logo"/></svg> Ahmed Ltayef</div>
+    <p class="tag">A verifiable result, not just a plausible one.</p>
+  </div>
+  <div class="prog">
+    <div class="track"><div class="fill" id="lfill"></div></div>
+    <div class="meta"><span>Loading</span><span class="count" id="lcount">000</span></div>
+  </div>
+</div>
+
+<!-- ======================= header ======================= -->
+<header id="hdr" class="rv" style="--rv-y:-14px;--rv-d:150ms">
+  <div class="shell bar">
+    <button class="brandbtn" data-scroll="home" aria-label="Back to top">
+      <span class="brand"><svg class="i"><use href="#ic-logo"/></svg> Ahmed Ltayef</span>
+    </button>
+    <nav aria-label="Primary">
+      <ul>
+        <li><button data-scroll="home" aria-current="page"><span>Home</span></button></li>
+        <li><button data-scroll="works"><span>Work</span></button></li>
+        <li><button data-scroll="services"><span>Skills <i style="font-size:.75rem;opacity:.6;font-style:normal">&#9662;</i></span></button></li>
+        <li><button data-scroll="about"><span>About</span></button></li>
+        <li><button data-scroll="creds"><span>Credentials</span></button></li>
+        <li><button data-modal><span>Contact</span></button></li>
+      </ul>
+    </nav>
+    <div class="right">
+      <div class="clock">
+        <span class="lbl">Local time</span>
+        <span class="t" id="ctime">9:41am</span>
+        <span class="sep">&bull;</span>
+        <span class="d" id="cdate">12 March, 2025</span>
+      </div>
+      <button id="menubtn" aria-label="Open menu"><span><svg class="i"><use href="#ic-grid"/></svg><span class="word">Menu</span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ======================= hero ======================= -->
+<section id="home">
+  <div id="liquid" aria-hidden="true">
+    <canvas class="base" id="cbase"></canvas>
+    <canvas class="paint" id="cpaint"></canvas>
+  </div>
+  <div class="vignette"></div>
+  <div class="scrim"></div>
+  <div class="watermark rv" style="--rv-y:20px;--rv-o:.4;--rv-d:300ms">LTAYEF</div>
+
+  <div class="shell grid">
+    <div class="hcol-l">
+      <span class="eyebrow rv" style="--rv-y:10px;--rv-d:200ms">Final-year engineering student</span>
+      <h1 class="lines" id="h1">
+        <span class="line"><span style="--ld:250ms">Autonomous agents,</span></span>
+        <span class="line"><span style="--ld:370ms">deep learning,</span></span>
+        <span class="line"><span style="--ld:490ms">shipped to production.</span></span>
+      </h1>
+      <div class="awards rv" style="--rv-d:650ms">
+        <span class="star"><svg class="i"><use href="#ic-star"/></svg></span>
+        <span>Winner — Inetum AI Night Challenge</span>
+        <span class="dot">&bull;</span>
+        <span>1st place — CodeItUp 6.0</span>
+      </div>
+      <div class="ctas rv" style="--rv-d:750ms">
+        <button class="pill dark arrow" data-modal><span>Get in touch<span class="badge"><svg class="i ar"><use href="#ic-ar"/></svg></span></span></button>
+        <button class="pill outline bare" data-scroll="works"><span>View work</span></button>
+      </div>
+    </div>
+
+    <div class="hcol-r">
+      <div class="hcard rv" style="--rv-y:16px;--rv-s:.96;--rv-d:400ms">
+        <button class="row" id="hcardrow" aria-label="Next highlight">
+          <span class="tile"><svg class="i"><use href="#ic-logo"/></svg></span>
+          <span class="panel">
+            <span class="slot" id="hslot"></span>
+            <span class="bot">
+              <span class="dots" id="hdots"></span>
+              <span class="nav">
+                <button type="button" id="hprev" aria-label="Previous"><svg class="i" style="transform:rotate(180deg)"><use href="#ic-ar"/></svg></button>
+                <button type="button" id="hnext" aria-label="Next"><svg class="i"><use href="#ic-ar"/></svg></button>
+              </span>
+            </span>
+          </span>
+        </button>
+      </div>
+
+      <div class="stackgrid rv" style="--rv-y:14px;--rv-d:550ms">
+        <p class="lbl">Working with</p>
+        <ul id="stacklist"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell statusbar rv" style="--rv-y:0px;--rv-d:900ms">
+    <span>Based in Tunis, Tunisia</span>
+    <span class="mid">Available for a final-year internship &mdash; Feb 2027</span>
+    <span class="scroll">Scroll to explore <span aria-hidden="true">&darr;</span></span>
+  </div>
+</section>
+
+<!-- ======================= about ======================= -->
+<section id="about">
+  <div class="shell inner">
+    <div class="globeblock">
+      <span class="eyebrow">The background</span>
+      <dl class="facts">
+        <div class="rv" style="--rv-y:12px">
+          <dt>Education</dt>
+          <dd><b>École Nationale d’Ingénieurs de Carthage</b>Final-year software engineering, AI specialisation</dd>
+        </div>
+        <div class="rv" style="--rv-y:12px;--rv-d:90ms">
+          <dt>Experience</dt>
+          <dd><b>AI engineering intern, Inetum</b>Tunis, July to September 2026</dd>
+        </div>
+        <div class="rv" style="--rv-y:12px;--rv-d:180ms">
+          <dt>Languages</dt>
+          <dd><b>Arabic · French · English</b>Native speaker · B2 · B2</dd>
+        </div>
+      </dl>
+      <div class="foot rv" style="--rv-y:12px;--rv-d:270ms">
+        <svg class="i" aria-hidden="true"><use href="#ic-globe"/></svg>
+        <span>Tunis-based, working with distributed teams across time zones.</span>
+      </div>
+    </div>
+    <div class="stmt">
+      <h2 class="words" id="aboutstmt"></h2>
+      <div class="frow rv" style="--rv-y:12px;--rv-d:200ms">
+        <div>
+          <p style="font-size:.875rem;color:rgba(17,17,17,.45)">Find me online</p>
+          <!-- Labelled, not three identical dots: the same icon three times
+               tells a visitor nothing about where each link goes. -->
+          <div class="social">
+            <a class="primary" href="https://www.linkedin.com/in/ahmed-ltayef/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="plain" href="https://github.com/LtayefAhmed" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="plain" href="mailto:Ahmedltayef8@gmail.com">Email</a>
+          </div>
+        </div>
+        <a class="pill outline arrow" href="https://github.com/LtayefAhmed" target="_blank" rel="noopener noreferrer"><span>See the code<span class="badge"><svg class="i aur"><use href="#ic-aur"/></svg></span></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= credentials ======================= -->
+<section id="creds">
+  <div class="shell inner">
+    <div class="wrap">
+      <span class="eyebrow rv">Credentials</span>
+      <ul id="credlist"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= build band ======================= -->
+<section id="band" aria-label="Ideas built and shipped">
+  <ul class="shell">
+    <li class="rv" style="--rv-y:28px;--rv-d:0ms"><div class="tile t-light">Ideas</div></li>
+    <li class="rv" style="--rv-y:28px;--rv-d:120ms"><div class="tile t-accent">Built</div></li>
+    <li class="rv" style="--rv-y:28px;--rv-d:240ms"><div class="tile t-dark"><svg class="i" aria-hidden="true"><use href="#ic-ar"/></svg></div></li>
+    <li class="rv" style="--rv-y:28px;--rv-d:360ms"><div class="tile t-ghost">Shipped</div></li>
+  </ul>
+</section>
+
+<!-- ======================= works ======================= -->
+<section id="works">
+  <div class="shell inner">
+    <div class="head">
+      <span class="eyebrow boxed rv">Portfolio</span>
+      <h2 class="lines" id="workstitle"><span class="line"><span style="--ld:120ms">Selected work</span></span></h2>
+    </div>
+    <ul class="cards" id="workslist"></ul>
+  </div>
+</section>
+
+<!-- ======================= services ======================= -->
+<section id="services">
+  <div class="shell inner">
+    <span class="eyebrow rv">Skills</span>
+    <h2 class="lines" id="servicestitle"><span class="line"><span style="--ld:120ms">What I do best</span></span></h2>
+    <ul id="serviceslist"></ul>
+  </div>
+</section>
+
+<!-- ======================= stats ======================= -->
+<section id="stats">
+  <div class="shell inner">
+    <div class="panel rv" style="--rv-y:40px;--rv-s:.99">
+      <span class="eyebrow light">By the numbers</span>
+      <h2 class="lines" id="statstitle"><span class="line"><span style="--ld:120ms">Measured, not claimed.</span></span></h2>
+      <ul id="statslist"></ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= footer ======================= -->
+<footer>
+  <div class="shell inner">
+    <div class="cta">
+      <h2 class="lines" id="footercta">
+        <span class="line"><span style="--ld:0ms">Hiring a final-year</span></span>
+        <span class="line"><span style="--ld:100ms">intern? Let's talk.</span></span>
+      </h2>
+      <button class="pill light arrow" data-modal><span>Start a conversation<span class="badge"><svg class="i aur"><use href="#ic-aur"/></svg></span></span></button>
+    </div>
+
+    <div class="cols">
+      <div class="bcol">
+        <div class="b"><svg class="i" style="color:#cf8047"><use href="#ic-logo"/></svg> Ahmed Ltayef</div>
+        <p>Final-year engineering student at ENICarthage, building AI systems that reach production.</p>
+      </div>
+      <div><h3>Work</h3><ul>
+        <li><a class="alink" href="#works"><span>SmartTender AI</span></a></li>
+        <li><a class="alink" href="#works"><span>Sandy Lab</span></a></li>
+        <li><a class="alink" href="#works"><span>EcoShield AI</span></a></li>
+        <li><a class="alink" href="#works"><span>ESG Classifier</span></a></li>
+      </ul></div>
+      <div><h3>Skills</h3><ul>
+        <li><a class="alink" href="#services"><span>AI agents &amp; LLM orchestration</span></a></li>
+        <li><a class="alink" href="#services"><span>Deep learning</span></a></li>
+        <li><a class="alink" href="#services"><span>Full-stack delivery</span></a></li>
+        <li><a class="alink" href="#services"><span>Security &amp; networking</span></a></li>
+      </ul></div>
+      <div><h3>Elsewhere</h3><ul>
+        <li><a class="alink" href="https://github.com/LtayefAhmed" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
+        <li><a class="alink" href="https://www.linkedin.com/in/ahmed-ltayef/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a></li>
+        <li><a class="alink" href="mailto:Ahmedltayef8@gmail.com"><span>Ahmedltayef8@gmail.com</span></a></li>
+        <li><a class="alink" href="tel:+21622025217"><span>+216 22 025 217</span></a></li>
+      </ul></div>
+    </div>
+
+    <div class="legal">
+      <span>&copy; 2026 Ahmed Ltayef. Tunis, Tunisia.</span>
+      <span class="r">
+        <a class="alink tight" href="https://github.com/LtayefAhmed" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a>
+        <a class="alink tight" href="https://www.linkedin.com/in/ahmed-ltayef/" target="_blank" rel="noopener noreferrer"><span>LinkedIn</span></a>
+      </span>
+    </div>
+  </div>
+  <div class="wm" aria-hidden="true">LTAYEF</div>
+</footer>
+
+<!-- ======================= nav overlay ======================= -->
+<div id="navmenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="shell top">
+    <span class="b"><svg class="i"><use href="#ic-logo"/></svg> Ahmed Ltayef</span>
+    <button id="navclose"><svg class="i"><use href="#ic-x"/></svg> Close</button>
+  </div>
+  <div class="shell mid"><ul id="navlist"></ul></div>
+  <div class="shell bot">
+    <span>Local time &mdash; <span id="navtime">9:41am</span></span>
+    <button data-modal>Start a conversation &rarr;</button>
+  </div>
+</div>
+
+<!-- ======================= modal ======================= -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modaltitle">
+  <div class="panel">
+    <button id="modalclose" aria-label="Close"><svg class="i"><use href="#ic-x"/></svg></button>
+    <div class="headb">
+      <span class="kick">Start a conversation</span>
+      <h2 id="modaltitle">Tell me about the role.</h2>
+    </div>
+    <form id="cform" novalidate>
+      <label><span class="cap">Name</span><input name="name" type="text" required placeholder="Your name"></label>
+      <label><span class="cap">Email</span><input name="email" type="email" required placeholder="you@company.com"></label>
+      <label><span class="cap">Message</span><textarea name="msg" rows="4" required placeholder="A few words about the role, the team and the timeline."></textarea></label>
+      <div class="brow">
+        <span class="note">Opens your mail app &mdash; I reply within one business day.</span>
+        <button class="pill dark arrow" type="submit"><span id="sendlabel">Send message<span class="badge"><svg class="i aur"><use href="#ic-aur"/></svg></span></span></button>
+      </div>
+    </form>
+    <div class="ok">
+      <span class="badge"><svg class="i"><use href="#ic-logo"/></svg></span>
+      <h2>Your mail app is open</h2>
+      <p>If nothing opened, write to <code>Ahmedltayef8@gmail.com</code> directly &mdash; I reply within one business day.</p>
+      <button class="pill dark bare" id="okclose"><span>Close</span></button>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }
+</script>
+<script type="module">
+/* ===========================================================================
+   Everything below is plain JS. No framework, no build step.
+   =========================================================================== */
+import Lenis from 'lenis';
+
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* --- adaptive grid above 1920px ----------------------------------------- */
+function applyAdaptiveGrid(){
+  const FONT_BASE = 16, baseWidth = 1920, coef = 0.6666;
+  const w = innerWidth;
+  const widthReduction = ((baseWidth - w) / baseWidth) * 100;
+  const size = FONT_BASE - (FONT_BASE * (widthReduction * coef)) / 100;
+  if (size > FONT_BASE) document.documentElement.style.fontSize = size + 'px';
+  else document.documentElement.style.removeProperty('font-size');
+}
+applyAdaptiveGrid(); addEventListener('resize', applyAdaptiveGrid);
+
+/* --- smooth scroll + a single scroll-lock gate -------------------------- */
+scrollTo(0, 0);
+const lenis = new Lenis({ smoothWheel: true });
+(function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })();
+
+let locks = 0;
+function stopScroll(){
+  locks++; lenis.stop();
+  const h = document.documentElement.style;
+  h.position = 'relative'; h.overflow = 'hidden'; h.height = '100%';
+}
+function startScroll(){
+  locks = Math.max(0, locks - 1);
+  if (locks) return;
+  lenis.start();
+  const h = document.documentElement.style;
+  h.removeProperty('position'); h.removeProperty('overflow'); h.removeProperty('height');
+}
+function scrollToId(id){
+  const el = document.getElementById(id); if (!el) return;
+  setTimeout(() => window.scrollTo({ top: el.getBoundingClientRect().top + pageYOffset, behavior: 'smooth' }), 50);
+}
+
+/* --- reveal on view ------------------------------------------------------ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+/* What is already on screen when the intro leaves is an entrance animation,
+   not a scroll trigger: it plays on its own delay. Only what sits below the
+   fold waits for the observer — and a timer sweeps up anything the observer
+   never reports, so a browser that starves it cannot leave the page blank. */
+function reveal(el){ el.classList.add('in'); }
+function inView(el, slack = 0.92){
+  const r = el.getBoundingClientRect();
+  return r.top < innerHeight * slack && r.bottom > 0;
+}
+function watch(root = document){
+  $$('.rv, .lines, .words', root).forEach(el => { if (inView(el)) reveal(el); else io.observe(el); });
+  setTimeout(() => $$('.rv, .lines, .words').forEach(el => { if (inView(el, 1)) reveal(el); }), 4000);
+}
+
+/* --- content ------------------------------------------------------------- */
+const HIGHLIGHTS = [
+  { caption: 'Agentic systems', title: 'A planner and its sub-agents.' },
+  { caption: 'Deep learning',   title: 'Transformers, LSTM, autoencoders.' },
+  { caption: 'Production',      title: 'FastAPI, React, Docker, 854 tests.' },
+];
+const STACK = ['Python','PyTorch','FastAPI','React','Docker','Qdrant','PostgreSQL'];
+const CREDS = [
+  'NVIDIA DLI — Generative AI with Diffusion Models',
+  'NVIDIA DLI — Fundamentals of Deep Learning',
+  'AWS Academy — Cloud Foundations',
+  'Cisco CCNA — Switching, Routing & Wireless',
+  'Cisco CCNA — Introduction to Networks',
+  'Cisco — Introduction to Cybersecurity',
+  'IBM SkillsBuild — AI Fundamentals',
+  'freeCodeCamp — Scientific Computing with Python',
+];
+const WORKS = [
+  { name:'SmartTender AI', meta:'Autonomous agents — Inetum internship',
+    href:'https://github.com/LtayefAhmed/SmartTender',
+    desc:'An end-to-end tender-response platform: public-portal monitoring, semantic matching of consultants against a notice, then the response dossier itself — tailored CVs, compliance matrix, commercial proposal.',
+    tags:['Autonomous agent','Vector search','FastAPI'] },
+  { name:'Sandy Lab', meta:'Multi-agent — CodeItUp 6.0, 1st place',
+    href:'https://github.com/LtayefAhmed/deepagent',
+    desc:'A planner orchestrating research, database and inventory sub-agents over LLMs to run a laboratory, with real-time human supervision gating every action.',
+    tags:['Multi-agent','LLM orchestration','React'] },
+  { name:'EcoShield AI', meta:'Deep learning — Green AI & cybersecurity',
+    href:'https://github.com/LtayefAhmed/EcoShield_AI',
+    desc:'A hybrid deep-learning system guarding critical smart-city infrastructure: an LSTM autoencoder for anomaly detection and an LSTM forecaster for load — ~99% accuracy against simulated attacks.',
+    tags:['LSTM','Anomaly detection','PyTorch'] },
+  { name:'ESG Narrative Classifier', meta:'NLP — Kaggle competition',
+    href:'https://github.com/LtayefAhmed/ESG_Narrative_Classification',
+    desc:'A multi-label DeBERTa-v3 pipeline separating E, S, G and non-ESG narratives. 5-fold CV, layer-wise LR decay, weighted BCE and threshold tuning took Macro F1 from 0.83 to ~0.90.',
+    tags:['DeBERTa-v3','NLP','Kaggle'] },
+];
+const SERVICES = [
+  { n:'01', t:'AI agents & LLM orchestration', d:'Planners, tool use, and agents that cite their sources.' },
+  { n:'02', t:'Deep learning',                 d:'Transformers, LSTM and autoencoders on real signals.' },
+  { n:'03', t:'Full-stack delivery',           d:'FastAPI, React and Docker, with tests that actually run.' },
+  { n:'04', t:'Security & networking',         d:'Network scanning, audit automation, CCNA foundations.' },
+];
+const STATS = [
+  { v:854, s:'',  l:'automated tests on SmartTender' },
+  { v:680, s:'K', l:'records scored in under 50 ms' },
+  { v:99,  s:'%', l:'accuracy against simulated attacks' },
+  { v:8,   s:'',  l:'professional certifications' },
+];
+const NAV = [
+  { label:'Home', id:'home' }, { label:'Work', id:'works' }, { label:'Skills', id:'services' },
+  { label:'About', id:'about' }, { label:'Credentials', id:'creds' }, { label:'Contact', id:null },
+];
+
+/* --- build the repeated markup ------------------------------------------ */
+const icon = (id, cls = '') => `<svg class="i ${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+
+$('#stacklist').innerHTML = STACK.map(n => `<li><span>${icon('ic-dot')}${n}</span></li>`).join('');
+$('#credlist').innerHTML  = CREDS.map((c,i) => `<li class="rv" style="--rv-y:14px;--rv-d:${i*55}ms"><span class="chip">${c}</span></li>`).join('');
+
+$('#workslist').innerHTML = WORKS.map((w,i) => `
+  <li class="rv" style="--rv-y:48px;--rv-d:${i*90}ms">
+    <a href="${w.href}" target="_blank" rel="noopener noreferrer"
+       aria-label="${w.name} — open the source on GitHub">
+      <article class="wcard">
+        <div class="meta"><span>${w.meta}</span><span class="go">${icon('ic-aur')}</span></div>
+        <div class="mark">${icon('ic-logo')}</div>
+        <div class="foot">
+          <h3>${w.name}</h3>
+          <p>${w.desc}</p>
+          <p class="repo">${icon('ic-gh')}<span>LtayefAhmed/<b>${w.href.split('/').pop()}</b></span></p>
+          <div class="tags">${w.tags.map(t => `<span class="chip on-dark">${t}</span>`).join('')}</div>
+        </div>
+      </article>
+    </a>
+  </li>`).join('');
+
+$('#serviceslist').innerHTML = SERVICES.map((s,i) => `
+  <li class="rv" style="--rv-y:24px;--rv-d:${i*80}ms">
+    <div class="srow"><button class="in" data-modal>
+      <span class="num">${s.n}</span><h3>${s.t}</h3><p>${s.d}</p><span class="go">${icon('ic-aur')}</span>
+    </button></div>
+  </li>`).join('');
+
+$('#statslist').innerHTML = STATS.map((s,i) => `
+  <li class="rv" style="--rv-y:20px;--rv-d:${i*90}ms">
+    <div class="n"><span data-count="${s.v}">0</span>${s.s}</div><div class="l">${s.l}</div>
+  </li>`).join('');
+
+$('#navlist').innerHTML = NAV.map((n,i) => `
+  <li><button data-nav="${n.id ?? ''}" style="transition-delay:${i*45 + 80}ms">
+    <span class="ix">0${i+1}</span><span class="lb">${n.label}</span>
+  </button></li>`).join('');
+
+/* About statement — split into words so each can slide up on its own. */
+(function(){
+  const lead = 'I work with teams to ship';
+  const dim  = 'AI systems that hold up in production — agents, models, and the engineering around them.';
+  const wrap = (txt, off) => txt.trim().split(/\s+/).map((w,i) =>
+    `<span class="word" style="--wd:${(i+off)*35}ms">${w}&nbsp;</span>`).join('');
+  const n = lead.trim().split(/\s+/).length;
+  $('#aboutstmt').innerHTML = wrap(lead, 0) + `<span class="dim">` + wrap(dim, n) + `</span>`;
+})();
+
+/* --- hero highlight carousel -------------------------------------------- */
+(function(){
+  const slot = $('#hslot'), dots = $('#hdots');
+  let i = 0, busy = false;
+  dots.innerHTML = HIGHLIGHTS.map((_,k) => `<i class="${k===0?'on':''}"></i>`).join('');
+  const node = (k, y) => {
+    const el = document.createElement('span');
+    el.className = 'item';
+    el.style.transform = `translateY(${y}px)`; el.style.opacity = y === 0 ? '1' : '0';
+    el.innerHTML = `<span class="cap">${HIGHLIGHTS[k].caption}</span><span class="ttl">${HIGHLIGHTS[k].title}</span>`;
+    return el;
+  };
+  slot.appendChild(node(0, 0));
+  function go(step){
+    if (busy) return; busy = true;
+    const next = (i + step + HIGHLIGHTS.length) % HIGHLIGHTS.length;
+    const out = slot.firstElementChild;
+    const inc = node(next, step > 0 ? 14 : -14);
+    slot.appendChild(inc);
+    requestAnimationFrame(() => {
+      out.style.transform = `translateY(${step > 0 ? -14 : 14}px)`; out.style.opacity = '0';
+      inc.style.transform = 'translateY(0)'; inc.style.opacity = '1';
+    });
+    setTimeout(() => { out.remove(); busy = false; }, 460);
+    i = next;
+    [...dots.children].forEach((d,k) => d.classList.toggle('on', k === i));
+  }
+  $('#hcardrow').addEventListener('click', e => { if (!e.target.closest('.nav')) go(1); });
+  $('#hnext').addEventListener('click', e => { e.stopPropagation(); go(1); });
+  $('#hprev').addEventListener('click', e => { e.stopPropagation(); go(-1); });
+})();
+
+/* --- live clock ---------------------------------------------------------- */
+(function(){
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const t = $('#ctime'), d = $('#cdate'), nt = $('#navtime');
+  function tick(){
+    const n = new Date();
+    const h = n.getHours() % 12 || 12, m = String(n.getMinutes()).padStart(2,'0');
+    const mer = n.getHours() >= 12 ? 'pm' : 'am';
+    const time = `${h}:${m}${mer}`;
+    t.textContent = time; nt.textContent = time;
+    d.textContent = `${n.getDate()} ${MONTHS[n.getMonth()]}, ${n.getFullYear()}`;
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* --- stats count-up ------------------------------------------------------
+   A one-shot timed run, not a scroll-linked value. Tied to scroll position,
+   the number freezes wherever the visitor stops — so the page could sit
+   there claiming 301 tests when the truth is 854. These figures are checkable
+   claims; they must always land on the real one.                           */
+(function(){
+  const nodes = $$('[data-count]');
+  if (!nodes.length) return;
+  const settle = n => { n.textContent = n.dataset.count; };
+  const run = n => {
+    const target = +n.dataset.count, t0 = performance.now(), dur = 1200;
+    setTimeout(() => settle(n), dur + 500);        // never leave a partial number up
+    (function step(now){
+      const t = Math.min(1, (now - t0) / dur);
+      n.textContent = Math.round((1 - Math.pow(1 - t, 3)) * target);
+      if (t < 1) requestAnimationFrame(step); else settle(n);
+    })(t0);
+  };
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    obs.unobserve(e.target); run(e.target);
+  }), { threshold: 0.35 });
+  nodes.forEach(n => obs.observe(n));
+  setTimeout(() => nodes.forEach(n => { if (n.textContent === '0') settle(n); }), 6000);
+})();
+
+/* ===========================================================================
+   Liquid reveal — the signature interaction.
+   Two layers are painted in code rather than loaded as photographs:
+   the base is a field of unstructured noise, the layer the cursor uncovers
+   is a structured graph. Moving the pointer pulls signal out of noise.
+   =========================================================================== */
+(function(){
+  const host = $('#liquid'), base = $('#cbase'), paint = $('#cpaint');
+  const bctx = base.getContext('2d'), pctx = paint.getContext('2d');
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const brushRadius = 143;
+  const decay = 0.016;
+
+  let W = 0, H = 0, radius = 0, diam = 0;
+  const cover = document.createElement('canvas');   // the revealed layer
+  const brush = document.createElement('canvas');
+  const bgx = brush.getContext('2d');
+  const points = []; let lastPt = null, idle = 0, running = false;
+
+  // Deterministic noise so the field does not reshuffle on every resize.
+  function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  /* Raw data: dense dashes laid out in loose rows, like records nobody has
+     read yet. It has to carry the frame on its own — the structured layer
+     only appears where the pointer has been. */
+  function paintNoise(ctx, w, h){
+    const g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, '#f2f1ef'); g.addColorStop(.55, '#dcdbd8'); g.addColorStop(1, '#b9b9b7');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    const r = rng(20261114);
+
+    const rowH = 15 * dpr;
+    for (let y = rowH; y < h; y += rowH){
+      let x = r() * 60 * dpr;
+      while (x < w){
+        const len = (3 + r() * 26) * dpr;
+        ctx.globalAlpha = 0.07 + r() * 0.3;
+        ctx.fillStyle = r() > 0.9 ? '#b15f2c' : '#1d2430';
+        ctx.fillRect(x, y, len, 1.5 * dpr);
+        x += len + (4 + r() * 30) * dpr;
+      }
+    }
+    const n = Math.round((w * h) / (1400 / dpr));
+    for (let i = 0; i < n; i++){
+      const s = (0.8 + r() * 2.2) * dpr;
+      ctx.globalAlpha = 0.08 + r() * 0.26;
+      ctx.fillStyle = r() > 0.88 ? '#b15f2c' : '#1d2430';
+      ctx.fillRect(r() * w, r() * h, s, s);
+    }
+    ctx.globalAlpha = 0.08; ctx.strokeStyle = '#1d2430'; ctx.lineWidth = 1 * dpr;
+    for (let x = 0; x < w; x += 108 * dpr){
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function paintSignal(ctx, w, h){
+    ctx.fillStyle = '#2b3038'; ctx.fillRect(0, 0, w, h);
+    const r = rng(7731), step = 108 * dpr;
+    const cols = Math.ceil(w / step) + 1, rows = Math.ceil(h / step) + 1;
+    const pts = [];
+    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++)
+      pts.push({ x: i * step + (r() - .5) * step * .55, y: j * step + (r() - .5) * step * .55, w: r() });
+    ctx.lineWidth = 1.1 * dpr;
+    for (let a = 0; a < pts.length; a++){
+      for (let b = a + 1; b < pts.length; b++){
+        const dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y;
+        const d = Math.hypot(dx, dy);
+        if (d < step * 1.22){
+          ctx.strokeStyle = `rgba(207,128,71,${0.42 - (d / (step * 1.22)) * 0.3})`;
+          ctx.beginPath(); ctx.moveTo(pts[a].x, pts[a].y); ctx.lineTo(pts[b].x, pts[b].y); ctx.stroke();
+        }
+      }
+    }
+    pts.forEach(p => {
+      const big = p.w > 0.86;
+      if (big){
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26 * dpr);
+        g.addColorStop(0, 'rgba(207,128,71,.42)'); g.addColorStop(1, 'rgba(207,128,71,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, 26 * dpr, 0, 7); ctx.fill();
+      }
+      ctx.fillStyle = big ? '#f0b184' : 'rgba(236,235,233,.78)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, (big ? 4.2 : 2.1) * dpr, 0, 7); ctx.fill();
+    });
+  }
+
+  function size(){
+    const rect = host.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    W = Math.round(rect.width * dpr); H = Math.round(rect.height * dpr);
+    [base, paint, cover].forEach(c => { c.width = W; c.height = H; });
+    radius = brushRadius * dpr; diam = Math.ceil(radius * 2);
+    brush.width = brush.height = diam;
+    paintNoise(bctx, W, H);
+    paintSignal(cover.getContext('2d'), W, H);
+    pctx.clearRect(0, 0, W, H);
+    points.length = 0; lastPt = null;
+  }
+
+  function stamp(x, y){
+    const c = diam / 2;
+    bgx.clearRect(0, 0, diam, diam);
+    bgx.globalCompositeOperation = 'source-over';
+    const g = bgx.createRadialGradient(c, c, 0, c, c, radius);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.55, 'rgba(255,255,255,.82)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    bgx.fillStyle = g; bgx.fillRect(0, 0, diam, diam);
+    bgx.globalCompositeOperation = 'source-in';
+    bgx.drawImage(cover, x - c, y - c, diam, diam, 0, 0, diam, diam);
+    pctx.globalCompositeOperation = 'source-over';
+    pctx.drawImage(brush, x - c, y - c);
+  }
+
+  function tick(){
+    requestAnimationFrame(tick);
+    if (!W) return;
+    const drawing = points.length > 0;
+    if (drawing) idle = 0; else { idle++; if (idle > 120) return; }
+    const fade = drawing ? decay : Math.min(decay + idle * 0.004, 0.5);
+    pctx.globalCompositeOperation = 'destination-out';
+    pctx.fillStyle = `rgba(0,0,0,${fade})`;
+    pctx.fillRect(0, 0, W, H);
+    if (drawing){ points.forEach(p => stamp(p.x, p.y)); points.length = 0; }
+    else if (idle === 120) pctx.clearRect(0, 0, W, H);
+  }
+
+  let pointerSeen = false;
+  function onMove(e){
+    const rect = host.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * dpr, y = (e.clientY - rect.top) * dpr;
+    if (x < -radius || y < -radius || x > W + radius || y > H + radius){ lastPt = null; return; }
+    if (FINE) pointerSeen = true;
+    if (lastPt){
+      const dx = x - lastPt.x, dy = y - lastPt.y, dist = Math.hypot(dx, dy);
+      const stepLen = Math.max(radius * 0.3, 1);
+      const n = Math.min(Math.ceil(dist / stepLen), 60);
+      for (let i = 1; i <= n; i++) points.push({ x: lastPt.x + dx * (i / n), y: lastPt.y + dy * (i / n) });
+    } else points.push({ x, y });
+    lastPt = { x, y };
+  }
+
+  /* On a touch screen there is no pointer to move, so the effect would never
+     fire and the hero would stay a flat field. A slow sweep draws itself —
+     on a mouse it runs only until the visitor takes over. */
+  const FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  function sweep(){
+    const t0 = performance.now(), dur = 6400;
+    (function run(now){
+      if (pointerSeen || !W) { if (!pointerSeen) requestAnimationFrame(run); return; }
+      const t = ((now - t0) % dur) / dur;
+      points.push({
+        x: W * (0.1 + 0.8 * t),
+        y: H * (0.5 + 0.24 * Math.sin(t * Math.PI * 2.4))
+      });
+      requestAnimationFrame(run);
+    })(t0);
+  }
+
+  size();
+  new ResizeObserver(size).observe(host);
+  if (!REDUCED){
+    addEventListener('pointermove', onMove, { passive:true });
+    if (!running){ running = true; tick(); }
+    if (FINE) setTimeout(sweep, 1500); else sweep();
+  } else {
+    paint.style.display = 'none';
+  }
+})();
+
+/* --- nav overlay --------------------------------------------------------- */
+const navmenu = $('#navmenu');
+function openNav(){ navmenu.classList.add('open'); stopScroll(); }
+function closeNav(){ if (!navmenu.classList.contains('open')) return; navmenu.classList.remove('open'); startScroll(); }
+$('#menubtn').addEventListener('click', openNav);
+$('#navclose').addEventListener('click', closeNav);
+
+/* --- request modal (wired to mail, not a stub) --------------------------- */
+const modal = $('#modal');
+function openModal(){ closeNav(); modal.classList.add('open'); stopScroll(); setTimeout(() => $('#cform input')?.focus(), 420); }
+function closeModal(){
+  if (!modal.classList.contains('open')) return;
+  modal.classList.remove('open'); startScroll();
+  setTimeout(() => { modal.classList.remove('done'); $('#cform').reset(); $('#sendlabel').firstChild.textContent = 'Send message'; }, 300);
+}
+$('#modalclose').addEventListener('click', closeModal);
+$('#okclose').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+$('.panel', modal).addEventListener('click', e => e.stopPropagation());
+
+$('#cform').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  if (!f.checkValidity()){ f.reportValidity(); return; }
+  $('#sendlabel').firstChild.textContent = 'Opening…';
+  const d = new FormData(f);
+  const subject = encodeURIComponent(`Portfolio — ${d.get('name')}`);
+  const body = encodeURIComponent(`${d.get('msg')}\n\n—\n${d.get('name')}\n${d.get('email')}`);
+  location.href = `mailto:Ahmedltayef8@gmail.com?subject=${subject}&body=${body}`;
+  setTimeout(() => modal.classList.add('done'), 500);
+});
+
+/* --- global wiring ------------------------------------------------------- */
+document.addEventListener('click', e => {
+  const m = e.target.closest('[data-modal]');       if (m){ openModal(); return; }
+  const s = e.target.closest('[data-scroll]');      if (s){ scrollToId(s.dataset.scroll); return; }
+  const n = e.target.closest('[data-nav]');
+  if (n){ closeNav(); const id = n.dataset.nav; if (id) setTimeout(() => scrollToId(id), 120); else setTimeout(openModal, 120); }
+});
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (modal.classList.contains('open')) closeModal();
+  else if (navmenu.classList.contains('open')) closeNav();
+});
+
+/* --- loader: count up, slide away, then let the hero play ---------------- */
+(function(){
+  const loader = $('#loader'), fill = $('#lfill'), count = $('#lcount');
+  const FILL_MS = 1300;
+  stopScroll();
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const t0 = performance.now();
+  let done = false;
+  function finish(){
+    if (done) return; done = true;
+    fill.style.width = '100%'; count.textContent = '100';
+    loader.classList.add('out');
+    setTimeout(() => {
+      loader.remove(); startScroll();
+      document.body.classList.add('ready');
+      watch();                                     // hero reveals begin only now
+    }, REDUCED ? 0 : 780);
+  }
+  /* A throttled tab can starve requestAnimationFrame. Without this fallback
+     the counter would stall and the page would stay scroll-locked for good. */
+  setTimeout(finish, FILL_MS + 900);
+  if (REDUCED) { finish(); return; }
+  (function step(now){
+    if (done) return;
+    const t = Math.min(1, (now - t0) / FILL_MS);
+    const p = Math.round(ease(t) * 100);
+    fill.style.width = p + '%';
+    count.textContent = String(p).padStart(3, '0');
+    if (t < 1) requestAnimationFrame(step); else finish();
+  })(t0);
+})();
+</script>
+</body>
+</html>
